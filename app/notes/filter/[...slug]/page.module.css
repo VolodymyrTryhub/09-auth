@@ -1,0 +1,27 @@
+.toolbar {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 24px;
+
+  gap: 16px;
+
+  flex-wrap: wrap;
+}
+
+.button {
+  background: #0d6efd;
+
+  color: white;
+
+  border: none;
+
+  padding: 8px 16px;
+
+  border-radius: 4px;
+
+  cursor: pointer;
+}
