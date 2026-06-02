@@ -13,7 +13,7 @@ import { createNote } from '@/lib/api';
 import type { CreateNoteData } from '@/types/note';
 
 interface NoteFormProps {
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 const validationSchema = Yup.object({
@@ -44,7 +44,7 @@ const NoteForm = ({ onClose }: NoteFormProps) => {
         queryKey: ['notes'],
       });
 
-      onClose();
+      onClose?.();
     },
   });
 
@@ -94,7 +94,7 @@ const NoteForm = ({ onClose }: NoteFormProps) => {
         </div>
 
         <div className={css.actions}>
-          <button type="button" onClick={onClose} className={css.cancelButton}>
+          <button type="button" onClick={() => onClose?.()} className={css.cancelButton}>
             Cancel
           </button>
 
