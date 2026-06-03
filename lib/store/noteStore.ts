@@ -6,13 +6,13 @@ import type { CreateNoteData } from '@/types/note';
 const initialDraft: CreateNoteData = {
   title: '',
   content: '',
-  categoryId: 'aa41e785-2f2f-4792-91ab-fda1d2d2733a',
+  tag: 'Todo',
 };
 
 interface NoteStore {
   draft: CreateNoteData;
 
-  setDraft: (draft: Partial<CreateNoteData>) => void;
+  setDraft: (draft: CreateNoteData) => void;
 
   clearDraft: () => void;
 }
@@ -23,12 +23,9 @@ export const useNoteStore = create<NoteStore>()(
       draft: initialDraft,
 
       setDraft: draft =>
-        set(state => ({
-          draft: {
-            ...state.draft,
-            ...draft,
-          },
-        })),
+        set({
+          draft,
+        }),
 
       clearDraft: () =>
         set({

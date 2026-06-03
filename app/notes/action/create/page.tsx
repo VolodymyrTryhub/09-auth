@@ -1,5 +1,19 @@
+import type { Metadata } from 'next';
+
 import NoteForm from '@/components/NoteForm/NoteForm';
 import css from './page.module.css';
+
+export const metadata: Metadata = {
+  title: 'Create Note | NoteHub',
+  description: 'Create a new note in NoteHub',
+
+  openGraph: {
+    title: 'Create Note | NoteHub',
+    description: 'Create a new note in NoteHub',
+    url: 'https://06-notehub-nextjs.vercel.app',
+    images: ['https://ac.goit.global/fullstack/react/notehub-og-meta.jpg'],
+  },
+};
 
 export default function CreateNotePage() {
   return (

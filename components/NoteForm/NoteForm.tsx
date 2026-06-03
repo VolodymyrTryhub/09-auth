@@ -10,6 +10,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { createNote } from '@/lib/api';
 
+import type { CreateNoteData } from '@/types/note';
+
 const NoteForm = () => {
   const router = useRouter();
 
@@ -48,6 +50,7 @@ const NoteForm = () => {
           value={draft.title}
           onChange={e =>
             setDraft({
+              ...draft,
               title: e.target.value,
             })
           }
@@ -64,6 +67,7 @@ const NoteForm = () => {
           value={draft.content}
           onChange={e =>
             setDraft({
+              ...draft,
               content: e.target.value,
             })
           }
@@ -72,33 +76,24 @@ const NoteForm = () => {
       </div>
 
       <div className={css.formGroup}>
-        <label htmlFor="category">Category</label>
+        <label htmlFor="tag">Tag</label>
 
         <select
-          id="category"
-          value={draft.categoryId}
+          id="tag"
+          value={draft.tag}
           onChange={e =>
             setDraft({
-              categoryId: e.target.value,
+              ...draft,
+              tag: e.target.value as CreateNoteData['tag'],
             })
           }
           className={css.select}
         >
-          <option value="aa41e785-2f2f-4792-91ab-fda1d2d2733a">Todo</option>
-
-          <option value="19f4af1b-176f-44bd-9e7b-c0bf4b475547">Work</option>
-
-          <option value="88c24267-74c7-4c7f-9be4-22eb4aa31de1">Personal</option>
-
-          <option value="05691a2f-79b7-4e42-8259-c81cd11edd90">Meeting</option>
-
-          <option value="8ac604a2-d263-42f3-845f-ed2e0d4051ee">Shopping</option>
-
-          <option value="2b42d16e-cd17-4632-b25f-5c2659f7a68d">Health</option>
-
-          <option value="a4990727-2bd7-4c83-a091-f16989a9f898">Important</option>
-
-          <option value="d1b3dfda-04b9-4d5e-befb-88d2d569d534">Finance</option>
+          <option value="Todo">Todo</option>
+          <option value="Work">Work</option>
+          <option value="Personal">Personal</option>
+          <option value="Meeting">Meeting</option>
+          <option value="Shopping">Shopping</option>
         </select>
       </div>
 

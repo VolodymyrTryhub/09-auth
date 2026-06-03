@@ -1,8 +1,8 @@
-export type NoteTag = string;
+export type NoteTag = 'Todo' | 'Work' | 'Personal' | 'Meeting' | 'Shopping';
 
 export interface Category {
   id: string;
-  name: NoteTag;
+  name: string;
   description: string;
   createdAt: string;
   updatedAt: string;
@@ -24,5 +24,5 @@ export interface Note {
 export interface CreateNoteData {
   title: string;
   content: string;
-  categoryId: string;
+  tag: NoteTag;
 }
