@@ -54,13 +54,23 @@ export const deleteNote = async (id: string): Promise<Note> => {
 };
 
 export const register = async (data: AuthData): Promise<User> => {
-  const res = await api.post<User>('/auth/register', data);
-  return res.data;
+  try {
+    const res = await api.post<User>('/auth/register', data);
+    return res.data;
+  } catch (error) {
+    console.log('REGISTER ERROR:', error);
+    throw error;
+  }
 };
 
 export const login = async (data: AuthData): Promise<User> => {
-  const res = await api.post<User>('/auth/login', data);
-  return res.data;
+  try {
+    const res = await api.post<User>('/auth/login', data);
+    return res.data;
+  } catch (error) {
+    console.log('LOGIN ERROR:', error);
+    throw error;
+  }
 };
 
 export const logout = async (): Promise<void> => {

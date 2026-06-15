@@ -14,7 +14,7 @@ export default function NotePreview({ note }: NotePreviewProps) {
           <h2>{note.title}</h2>
         </div>
 
-        <p className={css.tag}>{note.category.name}</p>
+        <span className={css.tag}>{note.tag}</span>
 
         <p className={css.content}>{note.content}</p>
 

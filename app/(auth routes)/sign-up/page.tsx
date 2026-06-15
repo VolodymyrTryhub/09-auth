@@ -6,8 +6,11 @@ import { useRouter } from 'next/navigation';
 import { register } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 
+import css from './page.module.css';
+
 export default function SignUpPage() {
   const router = useRouter();
+
   const setUser = useAuthStore(state => state.setUser);
 
   const [email, setEmail] = useState('');
@@ -34,37 +37,45 @@ export default function SignUpPage() {
   };
 
   return (
-    <main>
-      <h1>Sign up</h1>
+    <main className={css.mainContent}>
+      <form className={css.form} onSubmit={handleSubmit}>
+        <h1 className={css.formTitle}>Sign up</h1>
 
-      <form onSubmit={handleSubmit}>
-        <div>
+        <div className={css.formGroup}>
           <label htmlFor="email">Email</label>
 
           <input
             id="email"
             type="email"
+            name="email"
+            className={css.input}
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
           />
         </div>
 
-        <div>
+        <div className={css.formGroup}>
           <label htmlFor="password">Password</label>
 
           <input
             id="password"
             type="password"
+            name="password"
+            className={css.input}
             value={password}
             onChange={e => setPassword(e.target.value)}
             required
           />
         </div>
 
-        <button type="submit">Register</button>
+        <div className={css.actions}>
+          <button type="submit" className={css.submitButton}>
+            Register
+          </button>
+        </div>
 
-        {error && <p>{error}</p>}
+        {error && <p className={css.error}>{error}</p>}
       </form>
     </main>
   );

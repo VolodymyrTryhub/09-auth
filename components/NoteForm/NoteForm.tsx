@@ -8,7 +8,7 @@ import { useNoteStore } from '@/lib/store/noteStore';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { createNote } from '@/lib/api';
+import { createNote } from '@/lib/api/clientApi';
 
 import type { CreateNoteData } from '@/types/note';
 

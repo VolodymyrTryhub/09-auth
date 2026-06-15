@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import Modal from '@/components/Modal/Modal';
 
-import { fetchNoteById } from '@/lib/api';
+import { fetchNoteById } from '@/lib/api/clientApi';
 
 interface Props {
   id: string;
@@ -41,7 +41,7 @@ export default function NotePreviewClient({ id }: Props) {
 
       <h2>{note.title}</h2>
 
-      <p>Tag: {note.category.name}</p>
+      <p>Tag: {note.tag}</p>
 
       <p>{note.content}</p>
 

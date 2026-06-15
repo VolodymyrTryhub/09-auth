@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import css from './NoteList.module.css';
 
-import { deleteNote } from '@/lib/api';
+import { deleteNote } from '@/lib/api/clientApi';
 
 import type { Note } from '@/types/note';
 
@@ -15,6 +15,7 @@ interface NoteListProps {
 }
 
 const NoteList = ({ notes }: NoteListProps) => {
+  console.log(JSON.stringify(notes[0], null, 2));
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -37,7 +38,7 @@ const NoteList = ({ notes }: NoteListProps) => {
         <li key={note.id} className={css.listItem}>
           <h2 className={css.title}>{note.title}</h2>
 
-          <p className={css.tag}>{note.category.name}</p>
+          <p className={css.tag}>{note.tag}</p>
 
           <p className={css.content}>{note.content}</p>
 
