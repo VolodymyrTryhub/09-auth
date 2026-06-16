@@ -1,27 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+
+import { checkSession } from './lib/api/serverApi';
 
 const privateRoutes = ['/profile', '/notes'];
-
 const publicRoutes = ['/sign-in', '/sign-up'];
 
 export async function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const pathname = request.nextUrl.pathname;
 
-  const cookieStore = await cookies();
-
-  const accessToken = cookieStore.get('accessToken')?.value;
+  const accessToken = request.cookies.get('accessToken')?.value;
+  const refreshToken = request.cookies.get('refreshToken')?.value;
 
   const isPrivateRoute = privateRoutes.some(route => pathname.startsWith(route));
 
   const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
 
-  if (!accessToken && isPrivateRoute) {
+  let isAuthenticated = !!accessToken;
+
+  // Якщо accessToken немає, але є refreshToken —
+  // пробуємо оновити сесію
+  if (!accessToken && refreshToken) {
+    try {
+      const session = await checkSession();
+
+      if (session) {
+        isAuthenticated = true;
+      }
+    } catch {
+      isAuthenticated = false;
+    }
+  }
+
+  // Неавторизований користувач → приватний маршрут
+  if (!isAuthenticated && isPrivateRoute) {
     return NextResponse.redirect(new URL('/sign-in', request.url));
   }
 
-  if (accessToken && isPublicRoute) {
-    return NextResponse.redirect(new URL('/profile', request.url));
+  // Авторизований користувач → публічний маршрут
+  if (isAuthenticated && isPublicRoute) {
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
   return NextResponse.next();

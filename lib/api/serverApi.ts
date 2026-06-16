@@ -33,7 +33,6 @@ export const fetchNotes = async ({
           tag,
         }),
     },
-
     headers: {
       Cookie: cookieStore.toString(),
     },
@@ -66,19 +65,7 @@ export const getMe = async (): Promise<User> => {
   return res.data;
 };
 
-export const checkSession = async (): Promise<User | null> => {
-  const cookieStore = await cookies();
-
-  const res = await api.get<User | null>('/auth/session', {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-  });
-
-  return res.data;
-};
-
-export const checkServerSession = async () => {
+export const checkSession = async () => {
   const cookieStore = await cookies();
 
   const res = await api.get('/auth/session', {

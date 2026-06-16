@@ -19,18 +19,12 @@ interface Props {
 
 export default function NotesClient({ tag }: Props) {
   const [page, setPage] = useState(1);
-
   const [search, setSearch] = useState('');
 
-  const updateSearch = useDebouncedCallback(
-    (value: string) => {
-      setSearch(value);
-
-      setPage(1);
-    },
-
-    300
-  );
+  const updateSearch = useDebouncedCallback((value: string) => {
+    setSearch(value);
+    setPage(1);
+  }, 300);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['notes', page, search, tag],
@@ -58,19 +52,23 @@ export default function NotesClient({ tag }: Props) {
     return <p>Something went wrong</p>;
   }
 
+  const hasNotes = data.notes.length > 0;
+
   return (
     <>
       <div className={css.toolbar}>
         <SearchBox onChange={updateSearch} />
 
-        <Pagination currentPage={page} pageCount={data.totalPages} onPageChange={setPage} />
+        {hasNotes && (
+          <Pagination currentPage={page} pageCount={data.totalPages} onPageChange={setPage} />
+        )}
 
         <Link href="/notes/action/create" className={css.button}>
           Create note +
         </Link>
       </div>
 
-      <NoteList notes={data.notes} />
+      {hasNotes && <NoteList notes={data.notes} />}
     </>
   );
 }
