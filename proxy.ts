@@ -15,33 +15,40 @@ export async function proxy(request: NextRequest) {
 
   const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
 
+  const response = NextResponse.next();
+
   let isAuthenticated = !!accessToken;
 
-  // Якщо accessToken немає, але є refreshToken —
-  // пробуємо оновити сесію
   if (!accessToken && refreshToken) {
     try {
-      const session = await checkSession();
+      const sessionResponse = await checkSession();
 
-      if (session) {
+      if (sessionResponse.status === 200) {
         isAuthenticated = true;
+
+        const setCookie = sessionResponse.headers['set-cookie'];
+
+        if (setCookie) {
+          response.headers.set(
+            'set-cookie',
+            Array.isArray(setCookie) ? setCookie.join(', ') : setCookie
+          );
+        }
       }
     } catch {
       isAuthenticated = false;
     }
   }
 
-  // Неавторизований користувач → приватний маршрут
   if (!isAuthenticated && isPrivateRoute) {
     return NextResponse.redirect(new URL('/sign-in', request.url));
   }
 
-  // Авторизований користувач → публічний маршрут
   if (isAuthenticated && isPublicRoute) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {
