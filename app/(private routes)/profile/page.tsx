@@ -1,36 +1,52 @@
-'use client';
+import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { useEffect, useState } from 'react';
+import { getMe } from '@/lib/api/serverApi';
 
-import { getMe } from '@/lib/api/clientApi';
-import type { User } from '@/types/user';
+import css from './page.module.css';
 
-export default function ProfilePage() {
-  const [user, setUser] = useState<User | null>(null);
+export const metadata: Metadata = {
+  title: 'Profile Page',
+  description: 'User profile page',
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const data = await getMe();
-        setUser(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  openGraph: {
+    title: 'Profile Page',
+    description: 'User profile page',
+    url: '/profile',
+    images: ['https://ac.goit.global/fullstack/react/notehub-og-meta.jpg'],
+  },
+};
 
-    fetchUser();
-  }, []);
-
-  if (!user) {
-    return <p>Loading profile...</p>;
-  }
+export default async function ProfilePage() {
+  const user = await getMe();
 
   return (
-    <main>
-      <h1>Profile</h1>
+    <main className={css.mainContent}>
+      <div className={css.profileCard}>
+        <div className={css.header}>
+          <h1 className={css.formTitle}>Profile Page</h1>
 
-      <p>Email: {user.email}</p>
-      <p>Username: {user.username}</p>
+          <Link href="/profile/edit" className={css.editProfileButton}>
+            Edit Profile
+          </Link>
+        </div>
+
+        <div className={css.avatarWrapper}>
+          <Image
+            src={user.avatar}
+            alt="User Avatar"
+            width={120}
+            height={120}
+            className={css.avatar}
+          />
+        </div>
+
+        <div className={css.profileInfo}>
+          <p>Username: {user.username}</p>
+          <p>Email: {user.email}</p>
+        </div>
+      </div>
     </main>
   );
 }
