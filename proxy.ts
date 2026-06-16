@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { parse } from 'cookie';
 
 import { checkSession } from './lib/api/serverApi';
 
@@ -29,10 +30,19 @@ export async function proxy(request: NextRequest) {
         const setCookie = sessionResponse.headers['set-cookie'];
 
         if (setCookie) {
-          response.headers.set(
-            'set-cookie',
-            Array.isArray(setCookie) ? setCookie.join(', ') : setCookie
-          );
+          const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
+
+          for (const cookieStr of cookieArray) {
+            const parsed = parse(cookieStr);
+
+            if (parsed.accessToken) {
+              response.cookies.set('accessToken', parsed.accessToken);
+            }
+
+            if (parsed.refreshToken) {
+              response.cookies.set('refreshToken', parsed.refreshToken);
+            }
+          }
         }
       }
     } catch {
